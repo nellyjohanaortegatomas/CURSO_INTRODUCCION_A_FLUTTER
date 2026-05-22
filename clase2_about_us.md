@@ -1,0 +1,1 @@
+"Se presenta como parte de CSC creative, forma parte de este club como BSE y desarrollador de aplicaciones moviles en Manchester City, tiene 3 anos de experiencia en desarrollo de aplicaciones moviles, sus pasatiempos incluyen aprender nuevas tecnologias y estudiar desarrollo de aplicaciones moviles, tambien ha desarrollado aplicaciones desde cero con apoyo de una comunidad" 
