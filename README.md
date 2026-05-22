@@ -11,4 +11,4 @@
 - **Institución:** Instituto Tecnologico de Tuxtepec
 
 ## Descripción
-Este repositorio es único y exclusivamente para la materia de **Programación Nativa para Plataformas Móviles**, con todas las actividades realizadas a lo largo del semestre.
+Este repositorio es único y exclusivamente para el curso de **Introducción a Flutter** de la materia de **Programación Nativa para Plataformas Móviles**, con todas las secciones y clases realizadas a lo largo del curso.
