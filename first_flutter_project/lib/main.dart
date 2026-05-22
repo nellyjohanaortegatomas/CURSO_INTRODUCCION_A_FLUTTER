@@ -1,18 +1,21 @@
+import 'package:first_flutter_project/second_file.dart';
 import 'package:flutter/material.dart';
 
-void main(){
-  runApp(
-    MaterialApp(
+void main() => runApp( Myclass() );
+
+class Myclass extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: "My flutter app",
       home: Scaffold(
-        backgroundColor: Colors.deepPurple,
         appBar: AppBar(
           title: Text('Title'),
         ),
-        body: Center(
-          child: Text('Este es un texto.', textDirection: TextDirection.ltr,),
-        ),
+        body: SecondClass()
       )
-    ),
   );
+  }
 }
