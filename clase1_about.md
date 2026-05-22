@@ -1,0 +1,1 @@
+"El curso presenta a la instructora y su experiencia en desarrollo movil, tiene experiencia en Android, creacion de aplicaciones, UI basica, startups y proyectos freelance, tambien ha trabajado en comunidades de desarrollo." 
