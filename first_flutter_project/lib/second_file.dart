@@ -74,7 +74,7 @@ class SecondClass extends StatelessWidget{
         child: Container(
           color: Colors.red,
           child: Text(
-            "Expanded",
+            "Flexible",
             style: TextStyle(fontSize: 25.0),
           ),
         ),
