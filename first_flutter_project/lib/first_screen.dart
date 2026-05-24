@@ -6,6 +6,8 @@ class SecondClass extends StatefulWidget {
 }
 
 class _SecondClassState extends State<SecondClass> {
+  final _formKey = GlobalKey<FormState>();
+
   String maritalStatus = 'single';
   bool termsChecked = true;
 
@@ -20,7 +22,7 @@ class _SecondClassState extends State<SecondClass> {
           elevation: 10.0,
           //title: Center(child: Text('Title')
           //),
-          title: Text('Title'),
+          title: Text('Título'),
           centerTitle: true,
           actions: <Widget>[
             Icon(Icons.settings),
@@ -30,96 +32,127 @@ class _SecondClassState extends State<SecondClass> {
             child: Text('Este es un texto en la appbar'),
           ),*/
         ),
-        body: SingleChildScrollView(
+      body: Material(
+        child: SingleChildScrollView(
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 10.0),
             child: Form(
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  maxLength: 20,
-                  decoration: InputDecoration(hintText: 'Nombre', labelText: 'Ingresa tu Nombre'),
-                ),
-                TextFormField(
-                  decoration: InputDecoration(hintText: 'Edad', labelText: 'Ingresa tu Edad'),
-                  keyboardType: TextInputType.phone,
-                ),
-                TextFormField(
-                  obscureText: true,
-                  decoration: InputDecoration(hintText: 'Contraseña', labelText: 'Ingresa tu Contraseña'),
-                ),
-                DropdownButton<String>(
-                  hint: Text('Por favor, elige la colonia en la que vives.'),
-                  value: selectedLocation,
-                  items: locations.map((location) {
-                    return DropdownMenuItem(
-                      child: Text(location),
-                      value: location,
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedLocation = value!;
-                    });
-                  },
-                ),
-
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Expanded(
-                      child: RadioListTile<String>(
-                        title: const Text('Soltero/a'),
-                        value: 'single',
-                        groupValue: maritalStatus,
-                        onChanged: (value) {
-                          setState(() {
-                            maritalStatus = value!;
-                          });
-                        },
-                      ),
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Ingresa tu Nombre',
+                      hintText: 'Nombre',
                     ),
-                    Expanded(
-                      child: RadioListTile<String>(
-                        title: const Text('Casado/a'),
-                        value: 'married',
-                        groupValue: maritalStatus,
-                        onChanged: (value) {
-                          setState(() {
-                            maritalStatus = value!;
-                          });
-                        },
-                      ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Por favor, ingresa un nombre';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Ingresa tu Edad',
+                      hintText: 'Edad',
                     ),
-                  ],
-                ),
-
-                CheckboxListTile(
-                  controlAffinity: ListTileControlAffinity.leading,
-                  value: termsChecked,
-                  title: new Text(
-                    'Suscribirse al periódico y a los artículos relacionados.',
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value!.isEmpty) return 'Por favor, ingresa una edad';
+                      return null;
+                    },
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      termsChecked = value!;
-                    });
-                  },
-                ),
-
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
-                  foregroundColor: Colors.white,
+                  TextFormField(
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: 'Ingresa tu Contraseña',
+                      hintText: 'Contraseña',
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) return 'Por favor, ingresa una contraseña';
+                      if (value.length < 8) {
+                        return 'La contraseña debe tener más de 8 caracteres';
+                      }
+                      return null;
+                    },
                   ),
-                  onPressed: () {},
-                  child: Text('Registrar'),
-                )
-              ],
-            )
+                  DropdownButtonFormField<String>(
+                    hint: Text('Por favor, elige la colonia en la que vives.'),
+                    value: selectedLocation,
+                    items: locations.map((location) {
+                      return DropdownMenuItem(
+                        child: Text(location),
+                        value: location,
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedLocation = value;
+                      });
+                    },
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Expanded(
+                        child: RadioListTile<String>(
+                          title: Text('Soltero/a'),
+                          value: 'single',
+                          groupValue: maritalStatus,
+                          onChanged: (value) {
+                            setState(() {
+                              maritalStatus = value!;
+                            });
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: RadioListTile<String>(
+                          title: Text('Casado/a'),
+                          value: 'married',
+                          groupValue: maritalStatus,
+                          onChanged: (value) {
+                            setState(() {
+                              maritalStatus = value!;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  CheckboxListTile(
+                    value: termsChecked,
+                    title: Text(
+                      'Suscribirse al periódico y a los artículos relacionados.',
+                    ),
+                    controlAffinity: ListTileControlAffinity.leading,
+                    onChanged: (value) {
+                      setState(() {
+                        termsChecked = value ?? false;
+                      });
+                    },
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.deepPurple,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: Text('Registrar'),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Formulario enviado')),
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
           ),
-        )
-      )
+        ),
+      ),
     );
   }
 }
