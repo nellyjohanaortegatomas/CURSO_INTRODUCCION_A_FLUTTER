@@ -10,7 +10,26 @@ class Myclass extends StatelessWidget{
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "My flutter app",
-      home: SecondClass(),
+      routes: {
+        '/screen1': (context) => SecondClass(),
+        '/screen2': (context) => SecondClass(),
+        '/screen3': (context) => SecondClass(),
+        '/screen4': (context) => SecondClass(),
+      },
+      home: Scaffold(
+        appBar: AppBar(
+          elevation: 10.0,
+          title: Center(child: Text('Title')
+          ),
+          actions: <Widget>[
+            Icon(Icons.settings),
+          ],
+          // bottom: PreferredSize(
+          //   preferredSize: Size.fromHeight(40.0),
+          //   child: Text('This is a text in appbar'),
+          // ),
+        ),
+      ),
     );
   }
 }
