@@ -8,6 +8,9 @@ class SecondClass extends StatefulWidget {
 class _SecondClassState extends State<SecondClass> {
   final _formKey = GlobalKey<FormState>();
 
+  String name = '';
+  int age = 0;
+  String password = '';
   String maritalStatus = 'single';
   bool termsChecked = true;
 
@@ -16,22 +19,20 @@ class _SecondClassState extends State<SecondClass> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-        appBar: AppBar(
-          elevation: 10.0,
-          //title: Center(child: Text('Title')
-          //),
-          title: Text('Título'),
-          centerTitle: true,
-          actions: <Widget>[
-            Icon(Icons.settings),
-          ],
-          /*bottom: PreferredSize(
-            preferredSize: Size.fromHeight(40.0),
-            child: Text('Este es un texto en la appbar'),
-          ),*/
+      appBar: AppBar(
+        elevation: 10.0,
+        title: Center(
+          child: Text('Título'),
         ),
+        actions: <Widget>[
+          Icon(Icons.settings),
+        ],
+        /*bottom: PreferredSize(
+          preferredSize: Size.fromHeight(48.0),
+          child: Text('this is a text in appbar'),
+        ),*/
+      ),
       body: Material(
         child: SingleChildScrollView(
           child: Container(
@@ -46,10 +47,15 @@ class _SecondClassState extends State<SecondClass> {
                       hintText: 'Nombre',
                     ),
                     validator: (value) {
-                      if (value!.isEmpty) {
+                      if (value == null || value.isEmpty) {
                         return 'Por favor, ingresa un nombre';
                       }
                       return null;
+                    },
+                    onSaved: (value) {
+                      setState(() {
+                        name = value!;
+                      });
                     },
                   ),
                   TextFormField(
@@ -59,45 +65,59 @@ class _SecondClassState extends State<SecondClass> {
                     ),
                     keyboardType: TextInputType.number,
                     validator: (value) {
-                      if (value!.isEmpty) return 'Por favor, ingresa una edad';
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, ingresa una edad';
+                      }
                       return null;
+                    },
+                    onSaved: (value) {
+                      setState(() {
+                        age = int.tryParse(value!) ?? 0;
+                      });
                     },
                   ),
                   TextFormField(
                     obscureText: true,
                     decoration: InputDecoration(
-                      labelText: 'Ingresa tu Contraseña',
+                      labelText: 'Ingresa tu Contraseña',                      
                       hintText: 'Contraseña',
                     ),
                     validator: (value) {
-                      if (value!.isEmpty) return 'Por favor, ingresa una contraseña';
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, ingresa una contraseña';
+                      }
                       if (value.length < 8) {
                         return 'La contraseña debe tener más de 8 caracteres';
                       }
                       return null;
                     },
+                    onSaved: (value) {
+                      setState(() {
+                        password = value!;
+                      });
+                    },
                   ),
-                  DropdownButtonFormField<String>(
+                  DropdownButton<String>(
                     hint: Text('Por favor, elige la colonia en la que vives.'),
                     value: selectedLocation,
+                    onChanged: (newValue) {
+                      setState(() {
+                        selectedLocation = newValue!;
+                      });
+                    },
                     items: locations.map((location) {
-                      return DropdownMenuItem(
+                      return DropdownMenuItem<String>(
                         child: Text(location),
                         value: location,
                       );
                     }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedLocation = value;
-                      });
-                    },
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Expanded(
                         child: RadioListTile<String>(
-                          title: Text('Soltero/a'),
+                          title: const Text("Soltero/a"),
                           value: 'single',
                           groupValue: maritalStatus,
                           onChanged: (value) {
@@ -109,7 +129,7 @@ class _SecondClassState extends State<SecondClass> {
                       ),
                       Expanded(
                         child: RadioListTile<String>(
-                          title: Text('Casado/a'),
+                          title: const Text("Casado/a"),
                           value: 'married',
                           groupValue: maritalStatus,
                           onChanged: (value) {
@@ -123,15 +143,15 @@ class _SecondClassState extends State<SecondClass> {
                   ),
                   CheckboxListTile(
                     value: termsChecked,
-                    title: Text(
-                      'Suscribirse al periódico y a los artículos relacionados.',
-                    ),
-                    controlAffinity: ListTileControlAffinity.leading,
                     onChanged: (value) {
                       setState(() {
                         termsChecked = value ?? false;
                       });
                     },
+                    title: Text(
+                      'Suscribirse al periódico y a los artículos relacionados.',
+                    ),
+                    controlAffinity: ListTileControlAffinity.leading,
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -140,11 +160,7 @@ class _SecondClassState extends State<SecondClass> {
                     ),
                     child: Text('Registrar'),
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Formulario enviado')),
-                        );
-                      }
+                      onPressedSubmit(context);
                     },
                   ),
                 ],
@@ -154,5 +170,24 @@ class _SecondClassState extends State<SecondClass> {
         ),
       ),
     );
+  }
+
+  void onPressedSubmit(BuildContext context) {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      print("Name " + name);
+      print("Age " + age.toString());
+      print("City " + (selectedLocation ?? ''));
+      print("Marital Status " + maritalStatus);
+      print("Password " + password);
+      print("TermsChecked " + termsChecked.toString());
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Formulario enviado'),
+        ),
+      );
+    }
   }
 }
